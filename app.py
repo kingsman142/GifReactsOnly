@@ -7,7 +7,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'pix'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def homepage():
     the_time = datetime.now().strftime("%A, %d %b %Y %l:%M %p")
     if request.method == 'POST':
