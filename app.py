@@ -18,8 +18,8 @@ def get_symbol(query):
 
 
 @app.route('/getDates', methods=['GET', 'POST'])
-def my_endpoint(): json_data = request.get_json(force=True)
-    print(json_data)
+def my_endpoint(): 
+    json_data = request.get_json(force=True)
 
     x = get_symbol(json_data['company'])
     results = json.loads(x[x.find('{'):-2])['ResultSet']['Result']
