@@ -7,7 +7,7 @@ import json
 app = Flask(__name__)
 
 def get_stuff(query):
-    print(query)
+    query = '+'.join(query.split())
     return requests.get('http://d.yimg.com/aq/autoc?query=' + query + '&region=US&lang=en-US&callback=YAHOO.util.ScriptNodeDataSource.callbacks').text
 
 
