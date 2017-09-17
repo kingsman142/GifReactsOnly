@@ -39,7 +39,7 @@ export default class ImagePickerExample extends React.Component {
           onPress={this.captureImage}
           color="#e6b800"
         />
-        {image &&
+        {image && !gifs &&
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
         {status && <Text>{status}</Text>}
         { dates &&
@@ -48,19 +48,25 @@ export default class ImagePickerExample extends React.Component {
           ))
         }
         { gifs &&
-           gifs.map((gifUrl) => (
-               <Image
-                  style={{width: 200, height: 200}}
-                  source={{uri: gifUrl[1]}}
-                  key={gifUrl[1]}
-                />
-           ))
+           <ScrollView horizontal={true} >
+               { gifs.map((gifInfo) => (
+                   <View key={gifInfo[0]+gifInfo[1]} style={{ width: 200 }}>
+                       <Image
+                          style={{width: 200, height: 200}}
+                          source={{uri: gifInfo[1]}}
+                          key={gifInfo[1]}
+                        />
+                        <Text key={gifInfo[0]} style={{ width: 200, color: '#fff', fontSize: 14, lineHeight: 20, fontWeight: 'bold' }}>{gifInfo[0]}</Text>
+                    </View>
+               )) }
+           </ScrollView>
        }
       </View>
     );
   }
 
   findGiphyNews = async (dateVal) => {
+        this.setState({ gifs: null });
         let { symbol } = this.state;
         console.log("DATE v");
         console.log(dateVal);
@@ -88,7 +94,7 @@ export default class ImagePickerExample extends React.Component {
       console.log(result);
 
       if (!result.cancelled) {
-        this.setState({ image: result.uri });
+        this.setState({ image: result.uri, gifs: null, dates: null });
 
         const req = new vision.Request({
           image: new vision.Image({
