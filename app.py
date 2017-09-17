@@ -17,7 +17,7 @@ def my_test_endpoint():
     # forgot to set the MIME type to 'application/json'
 #    print('data from client:', input_json)
     company = input_json['company']
-    x = get_stuff(company).text
+    x = get_stuff(company)
     dictToReturn = {'answer': json.loads(x[x.find('{'):-2])}
     return jsonify(dictToReturn)
 
