@@ -60,15 +60,15 @@ def gif_endpoint():
     lt = link_title[0]
     ac = textapi.Client("725d5361", "ca278c04e1bc935d40bf3a7ade951836")
     result = ac.Summarize({'url':lt, 'sentences_number':3})
-    gifs = {'gifs':[(link, get(link)['data']['url']) for link in result['sentences']}
+    gifs = {'gifs':[(link, get(link)['data']['url']) for link in result['sentences']]}
 
     return jsonify(gifs)
 
 def get(query):
-        query.replace(' ', '+')   
-            web = requests.get('http://api.giphy.com/v1/gifs/translate?s='+ query + '&api_key=QU32gJsZ8f0iRR2nTE0uDtmq69RZmAw2&limit=5').text
-            data = json.loads(web)
-            return data
+    query.replace(' ', '+')   
+    web = requests.get('http://api.giphy.com/v1/gifs/translate?s='+ query + '&api_key=QU32gJsZ8f0iRR2nTE0uDtmq69RZmAw2&limit=5').text
+    data = json.loads(web)
+    return data
 
 
 
