@@ -61,7 +61,7 @@ def gif_endpoint():
     print(lt)
     ac = textapi.Client("725d5361", "ca278c04e1bc935d40bf3a7ade951836")
     result = ac.Summarize({'url':lt, 'sentences_number':3})
-    gifs = {'gifs':[(link, get(link)['data']['url']) for link in result['sentences']]}
+    gifs = {'gifs':[(link, get(link)['data']['images']['original']['url']) for link in result['sentences']]}
 
     return jsonify(gifs)
 
