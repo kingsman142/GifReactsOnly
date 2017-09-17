@@ -4,7 +4,9 @@ import calendar
 import logging 
 from flask import Flask, render_template, request, url_for, jsonify
 from aylienapiclient import textapi
-
+from watson_developer_cloud import NaturalLanguageUnderstandingV1
+import watson_developer_cloud.natural_language_understanding.features.v1 as Features
+           
 import requests
 import json
 import nasdaq
@@ -43,6 +45,12 @@ def my_endpoint():
 
 @app.route('/getGifs', methods=['GET', 'POST'])
 def gif_endpoint():
+    natural_language_understanding = NaturalLanguageUnderstandingV1(
+        username="bcda7867-eae8-4370-b98f-74290ed21462",
+        password="QNKi8PIaI6b0",
+        version="2017-02-27")
+
+
     json_data = request.get_json(force=True)
     s = json_data['date']
     date = datetime.strptime(s, "%Y-%m-%d")
@@ -61,8 +69,12 @@ def gif_endpoint():
     print(lt)
     ac = textapi.Client("725d5361", "ca278c04e1bc935d40bf3a7ade951836")
     result = ac.Summarize({'url':lt, 'sentences_number':3})
-    gifs = {'gifs':[(link, get(link)['data']['images']['original']['url']) for link in result['sentences']]}
-
+    gifs = {'gifs':[]}
+    for sentence in result['sentences']:
+        response = natural_language_understanding.analyze(text=sentence, features=[Features.Keywords( emotion=True,sentiment=True,limit=3)])  
+        keyphrase = ' '.join(x['text'] for x in response['keywords'])
+        print(keyphrase)
+        gifs['gifs'].append((sentence, get(keyphrase) ['data']['images']['original']['url']))
     return jsonify(gifs)
 
 def get(query):
