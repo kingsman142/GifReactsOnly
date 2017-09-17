@@ -4,7 +4,10 @@ import { StyleSheet, Button, Image, Text, View } from 'react-native';
 import {
   AppRegistry,
   Dimensions,
+  StyleSheet,
+  Text,
   TouchableHighlight,
+  View
 } from 'react-native';
 import { ImagePicker } from 'expo';
 
@@ -65,8 +68,21 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row',
   },
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  capture: {
+    flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    color: '#000',
+    padding: 10,
+    margin: 40
+  }
 });
+
+AppRegistry.registerComponent('App', () => BadInstagramCloneApp);
