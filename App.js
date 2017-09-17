@@ -1,6 +1,8 @@
 import React from 'react';
-import { Button, Image, View } from 'react-native';
+import { Button, Image, Text, View, StyleSheet } from 'react-native';
 import { ImagePicker } from 'expo';
+import vision from "react-cloud-vision-api";
+vision.init({ auth: 'AIzaSyC7fk12dbsYVi7x4zBC4suE3zQpJQboIGU' })
 
 export default class ImagePickerExample extends React.Component {
   constructor(props) {
@@ -15,10 +17,11 @@ export default class ImagePickerExample extends React.Component {
 
   state = {
     image: null,
+    status: null,
   };
 
   render() {
-    let { image } = this.state;
+    let { image, status } = this.state;
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -28,6 +31,7 @@ export default class ImagePickerExample extends React.Component {
         />
         {image &&
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        {status && <Text>{status}</Text>}
       </View>
     );
   }
@@ -35,22 +39,32 @@ export default class ImagePickerExample extends React.Component {
   captureImage = async () => {
     let result = await ImagePicker.launchCameraAsync({
       allowsEditing: false,
-  }, function(){
-      ajax({
-          url: "https://gif-reacts-only.herokuapp.com/upload_files",
-          type: "POST",
-          body: {
-              image: new File(["foo"], "foo.txt", {}),
-          },
-          success: function(output){
-              console.log("submitted image to server; output: " + output);
-          }
-      });
+      base64: true,
+    });
 
     console.log(result);
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
+
+      const req = new vision.Request({
+        image: new vision.Image({
+          base64: result.base64,
+        }),
+        features: [
+          new vision.Feature('TEXT_DETECTION', 1),
+          new vision.Feature('LOGO_DETECTION', 1),
+        ]
+      })
+
+      vision.annotate(req).then((res) => {
+          this.setState({ status: JSON.stringify(res.responses) });
+          consolelog(res.responses);
+      }, (e) => {
+          let errorText = 'Error: ' + e;
+          console.error(errorText);
+          this.setState({ status: errorText });
+      });
     }
   };
 }
