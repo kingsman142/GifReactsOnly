@@ -11,7 +11,7 @@ def get_stuff(query):
     return requests.get('http://d.yimg.com/aq/autoc?query=' + query + '&region=US&lang=en-US&callback=YAHOO.util.ScriptNodeDataSource.callbacks').text
 
 
-@app.route('/tests/endpoint', methods=['GET', 'POST'])
+@app.route('/getDates', methods=['GET', 'POST'])
 def my_endpoint():
     
     json_data = request.get_json(force=True)
