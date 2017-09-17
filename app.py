@@ -22,8 +22,5 @@ def homepage():
         return '''
         <h1>no post</h1>
         '''
-if __name__ == '__main__':
-	app.run(debug=True, use_reloader=True)
-
 if __name__ == "__main__":
     app.run(debug=True)
