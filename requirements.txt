@@ -1,4 +1,5 @@
 gunicorn
+aylien-apiclient
 html5lib
 bs4
 requests
