@@ -14,8 +14,6 @@ def get_stuff(query):
 def my_test_endpoint():
     
     input_json = request.data
-     print('data from client:', input_json)
-    print(input_json)
     company = input_json['company']
     x = get_stuff(company)
     ans = {'answer': json.loads(x[x.find('{'):-2])}
