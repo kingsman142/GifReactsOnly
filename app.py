@@ -13,14 +13,13 @@ def get_stuff(query):
 @app.route('/tests/endpoint', methods=['GET', 'POST'])
 def my_test_endpoint():
     
-#    input_json = request.get_json(force=True) 
-    # force=True, above, is necessary if another developer 
-    # forgot to set the MIME type to 'application/json'
-    # print('data from client:', input_json)
-#company = input_json['company']
-    x = get_stuff('google')
-    dictToReturn = {'answer': json.loads(x[x.find('{'):-2])}
-    return jsonify(dictToReturn)
+    input_json = request.data
+     print('data from client:', input_json)
+    print(input_json)
+    company = input_json['company']
+    x = get_stuff(company)
+    ans = {'answer': json.loads(x[x.find('{'):-2])}
+    return jsonify(ans)
 
 if __name__ == '__main__':
     app.run(debug=True)
