@@ -14,7 +14,8 @@ export default class ImagePickerExample extends React.Component {
     this.state = {
      image: null,
      dates: null,
-     gifs: null
+     gifs: null,
+     symbol: null
     }
 
     this.captureImage();
@@ -24,7 +25,8 @@ export default class ImagePickerExample extends React.Component {
     image: null,
     status: null,
     dates: null,
-    gifs: null
+    gifs: null,
+    symbol: null
   };
 
   render() {
@@ -40,49 +42,41 @@ export default class ImagePickerExample extends React.Component {
         {image &&
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
         {status && <Text>{status}</Text>}
-        {<Swiper style={styles.wrapper} showsButtons={true}>
-            <View style={styles.slide1}>
-              <Text style={styles.text}>Hello Swiper</Text>
-            </View>
-            <View style={styles.slide2}>
-              <Text style={styles.text}>Beautiful</Text>
-            </View>
-            <View style={styles.slide3}>
-              <Text style={styles.text}>And simple</Text>
-            </View>
-          </Swiper>}
-        /*{ dates &&
+        { dates &&
           dates.map((date) => (
-              <Button title={date} onPress={this.findGiphyNews} key={date} color="#e6b800" />
+              <Button title={date} onPress={() => this.findGiphyNews(date)} key={date} color="#e6b800" />
           ))
         }
         { gifs &&
            gifs.map((gifUrl) => (
                <Image
                   style={{width: 200, height: 200}}
-                  source={{uri: gifUrl}}
-                  key={gifUrl}
+                  source={{uri: gifUrl[1]}}
+                  key={gifUrl[1]}
                 />
            ))
-       }*/
+       }
       </View>
     );
   }
 
-  findGiphyNews = async () => {
-        /*fetch('https://gif-reacts-only.herokuapp.com/getGifs', {
+  findGiphyNews = async (dateVal) => {
+        let { symbol } = this.state;
+        console.log("DATE v");
+        console.log(dateVal);
+        fetch('https://gif-reacts-only.herokuapp.com/getGifs', {
             method: 'POST',
             timeout: 10000,
-            body: JSON.stringify({'company': companyName})
+            body: JSON.stringify({'symbol': symbol, 'date': dateVal})
         }).then((output) => output.json()).then((parsed) => {
-            let dates = parsed.dates;
-            console.log(dates);
-            this.setState({ dates: dates });
+            let gifsArr = parsed.gifs;
+            console.log(gifsArr);
+            this.setState({ gifs: gifsArr });
         }).catch((error) => {
             console.error(error);
-        });*/
-        gifs = ["https://media3.giphy.com/media/5xtDarEbygs3Pu7p3jO/200_d.gif", "https://media.giphy.com/media/3o6oziEt5VUgsuunxS/giphy.gif"]
-        this.setState({ gifs: gifs });
+        });
+        //gifs = ["https://media3.giphy.com/media/5xtDarEbygs3Pu7p3jO/200_d.gif", "https://media.giphy.com/media/3o6oziEt5VUgsuunxS/giphy.gif"]
+        //this.setState({ gifs: gifs });
     }
 
     captureImage = async () => {
@@ -130,7 +124,7 @@ export default class ImagePickerExample extends React.Component {
             }).then((output) => output.json()).then((parsed) => {
                 let dates = parsed.dates;
                 console.log(dates);
-                this.setState({ dates: dates });
+                this.setState({ dates: dates, symbol: parsed.symbol });
             }).catch((error) => {
                 console.error(error);
             });
