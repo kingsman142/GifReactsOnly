@@ -1,8 +1,7 @@
 import os
 from bs4 import BeautifulSoup
 import calendar
-import logging
-from flask import Flask, render_template, request, url_for, jsonify
+import logging from flask import Flask, render_template, request, url_for, jsonify
 from aylienapiclient import textapi
 
 import requests
@@ -57,7 +56,8 @@ def gif_endpoint():
     articles = soup.find_all("a", {"id":"n-cn-"}) 
     link_title = [(x.attrs['href'], x.text) for x in articles]
     print(link_title)
-    lt = link_title[0]
+    lt = link_title[0][0]
+    print(lt)
     ac = textapi.Client("725d5361", "ca278c04e1bc935d40bf3a7ade951836")
     result = ac.Summarize({'url':lt, 'sentences_number':3})
     gifs = {'gifs':[(link, get(link)['data']['url']) for link in result['sentences']]}
