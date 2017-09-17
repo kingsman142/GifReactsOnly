@@ -48,12 +48,15 @@ export default class ImagePickerExample extends React.Component {
           ))
         }
         { gifs &&
-           gifs.map((gifUrl) => (
+           gifs.map((gif) => (
+               <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
                <Image
-                  style={{width: 200, height: 200}}
-                  source={{uri: gifUrl[1]}}
-                  key={gifUrl[1]}
+                  style={{width: 300, height: 300}}
+                  source={{uri: gif[1]}}
+                  key={gif[1]}
                 />
+                <Text>Hello world!</Text>
+                </View>
            ))
        }
       </View>
@@ -70,7 +73,8 @@ export default class ImagePickerExample extends React.Component {
             body: JSON.stringify({'symbol': symbol, 'date': dateVal})
         }).then((output) => output.json()).then((parsed) => {
             let gifsArr = parsed.gifs;
-            console.log(gifsArr);
+            console.log("giftsarr v");
+            console.log(gifsArr[0][0]);
             this.setState({ gifs: gifsArr });
         }).catch((error) => {
             console.error(error);
