@@ -3,7 +3,10 @@ from flask import Flask, request, redirect, url_for
 #from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 UPLOAD_FOLDER = 'pix'
+
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 @app.route('/')
