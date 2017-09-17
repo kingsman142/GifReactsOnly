@@ -74,7 +74,7 @@ def gif_endpoint():
         response = natural_language_understanding.analyze(text=sentence, features=[Features.Keywords( emotion=True,sentiment=True,limit=3)])  
         keyphrase = ' '.join(x['text'] for x in response['keywords'])
         print(keyphrase)
-        gifs['gifs'].append((sentence, get(keyphrase) ['data']['images']['original']['url']))
+        gifs['gifs'].append((sentence.replace('\n', ' '), get(keyphrase) ['data']['images']['original']['url']))
     return jsonify(gifs)
 
 def get(query):
