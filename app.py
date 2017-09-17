@@ -17,12 +17,13 @@ def homepage():
 
     <img src="http://loremflickr.com/600/400">
     """.format(time=the_time)
-
-@app.route('/', methods=['GET', 'POST'])
+'''
+@app.route('/post', methods=['GET', 'POST'])
 def upload_file():
         if request.method == 'POST':
             return """
             <h1>got post</h1>
             """
+'''
 if __name__ == "__main__":
     app.run(debug=True)
