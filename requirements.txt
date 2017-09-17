@@ -1,4 +1,5 @@
 gunicorn
+watson-developer-cloud
 aylien-apiclient
 html5lib
 bs4
