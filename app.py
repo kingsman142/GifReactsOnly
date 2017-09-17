@@ -1,8 +1,8 @@
 import os
 from bs4 import BeautifulSoup
 import calendar
-import logging from flask 
-import Flask, render_template, request, url_for, jsonify
+import logging 
+from flask import Flask, render_template, request, url_for, jsonify
 from aylienapiclient import textapi
 
 import requests
