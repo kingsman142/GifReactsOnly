@@ -68,7 +68,7 @@ def gif_endpoint():
     lt = link_title[0][0]
     print(lt)
     ac = textapi.Client("725d5361", "ca278c04e1bc935d40bf3a7ade951836")
-    result = ac.Summarize({'url':lt, 'sentences_number':3})
+    result = ac.Summarize({'url':lt, 'sentences_number':5})
     gifs = {'gifs':[]}
     for sentence in result['sentences']:
         response = natural_language_understanding.analyze(text=sentence, features=[Features.Keywords( emotion=True,sentiment=True,limit=3)])  
