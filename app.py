@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import calendar
 import logging
 from flask import Flask, render_template, request, url_for, jsonify
+from aylienapiclient import textapi
+
 import requests
 import json
 import nasdaq
@@ -16,8 +18,7 @@ def get_symbol(query):
 
 
 @app.route('/getDates', methods=['GET', 'POST'])
-def my_endpoint():
-    json_data = request.get_json(force=True)
+def my_endpoint(): json_data = request.get_json(force=True)
     print(json_data)
 
     x = get_symbol(json_data['company'])
@@ -35,22 +36,7 @@ def my_endpoint():
         best_dates = sorted(dates_sliding, key=lambda x:x[0])
         top_dates['dates'] = sorted([x[1] for x in best_dates[-5:]])
         top_dates['symbol'] = code
-        print(top_dates)
-        for s in top_dates['dates']:
-            date = datetime.strptime(s, "%Y-%m-%d")
-            modified_date = date + timedelta(days=1)
-            end = datetime.strftime(modified_date, "%Y-%m-%d")
-            start = s 
-            code = 'MSFT'
-            url = 'https://finance.google.com/finance/company_news?q=NASDAQ%3A{}&start=0&num=5&startdate={}&enddate={}'.format(code, start, end)
-            print(url)
-            page = requests.get(url)
-            soup = BeautifulSoup(page.text, 'html5lib')
-            articles = soup.find_all("a", {"id":"n-cn-"}) 
-            link_title = [(x.attrs['href'], x.text) for x in articles]
-            print(link_title)
-
-       
+              
         return jsonify(top_dates)
     else:
         return jsonify({'dates':[]})
@@ -58,9 +44,11 @@ def my_endpoint():
 @app.route('/getGifs', methods=['GET', 'POST'])
 def gif_endpoint():
     json_data = request.get_json(force=True)
-    date = json_data['date']
-    end = date[:-2] + str(int(date[-2:]))
-    start = date[:-2] + str(int(date[-2:]))
+    s = json_data['date']
+    date = datetime.strptime(s, "%Y-%m-%d")
+    modified_date = date + timedelta(days=1)
+    end = datetime.strftime(modified_date, "%Y-%m-%d")
+    start = s 
     code = json_data['symbol']
     url = 'https://finance.google.com/finance/company_news?q=NASDAQ%3A{}&start=0&num=5&startdate={}&enddate={}'.format(code, start, end)
     print(url)
@@ -69,7 +57,18 @@ def gif_endpoint():
     articles = soup.find_all("a", {"id":"n-cn-"}) 
     link_title = [(x.attrs['href'], x.text) for x in articles]
     print(link_title)
-    return jsonify({'link_titles': link_title})
+    lt = link_title[0]
+    ac = textapi.Client("725d5361", "ca278c04e1bc935d40bf3a7ade951836")
+    result = ac.Summarize({'url':lt, 'sentences_number':3})
+    gifs = {'gifs':[(link, get(link)['data']['url']) for link in result['sentences']}
+
+    return jsonify(gifs)
+
+def get(query):
+        query.replace(' ', '+')   
+            web = requests.get('http://api.giphy.com/v1/gifs/translate?s='+ query + '&api_key=QU32gJsZ8f0iRR2nTE0uDtmq69RZmAw2&limit=5').text
+            data = json.loads(web)
+            return data
 
 
 
