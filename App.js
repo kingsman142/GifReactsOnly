@@ -48,18 +48,6 @@ export default class ImagePickerExample extends React.Component {
           ))
         }
         { gifs &&
-<<<<<<< HEAD
-           gifs.map((gif) => (
-               <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-               <Image
-                  style={{width: 300, height: 300}}
-                  source={{uri: gif[1]}}
-                  key={gif[1]}
-                />
-                <Text>Hello world!</Text>
-                </View>
-           ))
-=======
            <ScrollView horizontal={true} >
                { gifs.map((gifInfo) => (
                    <View key={gifInfo[0]+gifInfo[1]} style={{ width: 200 }}>
@@ -72,7 +60,6 @@ export default class ImagePickerExample extends React.Component {
                     </View>
                )) }
            </ScrollView>
->>>>>>> 36eb5157f101048cef97fddbbb4f0efbf83a946a
        }
       </View>
     );
