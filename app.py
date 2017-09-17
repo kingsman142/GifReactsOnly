@@ -11,12 +11,10 @@ def get_stuff(query):
 
 
 @app.route('/tests/endpoint', methods=['GET', 'POST'])
-def my_test_endpoint():
-    
-    input_json = request.data
-    company = input_json['company']
-    x = get_stuff(company)
-    ans = {'answer': json.loads(x[x.find('{'):-2])}
+def my_endpoint():
+#x = get_stuff(json_data['company'])
+#ans = {'answer': json.loads(x[x.find('{'):-2])}
+    ans = {'answer': 'haha'}
     return jsonify(ans)
 
 if __name__ == '__main__':
