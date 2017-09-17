@@ -10,7 +10,9 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 
 top_dates = {}
-def get_symbol(query): query = '+'.join(query.split()) return requests.get('http://d.yimg.com/aq/autoc?query=' + query + '&region=US&lang=en-US&callback=YAHOO.util.ScriptNodeDataSource.callbacks').text
+def get_symbol(query): 
+    query = '+'.join(query.split()) 
+    return requests.get('http://d.yimg.com/aq/autoc?query=' + query + '&region=US&lang=en-US&callback=YAHOO.util.ScriptNodeDataSource.callbacks').text
 
 
 @app.route('/getDates', methods=['GET', 'POST'])
