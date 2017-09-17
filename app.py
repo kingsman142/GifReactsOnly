@@ -1,6 +1,11 @@
-from flask import Flask
-from datetime import datetime
+from app import app
+import os
+from flask import Flask, request, redirect, url_for
+from werkzeug.utils import secure_filename
+
 app = Flask(__name__)
+UPLOAD_FOLDER = 'pix'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
@@ -19,3 +24,6 @@ def homepage():
         '''
 if __name__ == '__main__':
 	app.run(debug=True, use_reloader=True)
+
+if __name__ == "__main__":
+    app.run(debug=True)
