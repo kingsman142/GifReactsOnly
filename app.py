@@ -1,4 +1,3 @@
-from app import app
 import os
 from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
