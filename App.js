@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Image, Text, View, StyleSheet } from 'react-native';
 import { ImagePicker } from 'expo';
 import vision from "react-cloud-vision-api";
+import $ from 'jquery';
 vision.init({ auth: 'AIzaSyC7fk12dbsYVi7x4zBC4suE3zQpJQboIGU' })
 
 export default class ImagePickerExample extends React.Component {
@@ -52,18 +53,45 @@ export default class ImagePickerExample extends React.Component {
           base64: result.base64,
         }),
         features: [
-          new vision.Feature('TEXT_DETECTION', 1),
+          //new vision.Feature('TEXT_DETECTION', 1),
           new vision.Feature('LOGO_DETECTION', 1),
         ]
       })
 
       vision.annotate(req).then((res) => {
           this.setState({ status: JSON.stringify(res.responses) });
-          consolelog(res.responses);
+          console.log(res.responses);
+
+          if(res && res.responses && res.responses[0] && res.responses[0].logoAnnotations && res.responses[0].logoAnnotations[0] && res.responses[0].logoAnnotations[0].description) return res.responses[0].logoAnnotations[0].description; //Company name
+          else return "";
       }, (e) => {
           let errorText = 'Error: ' + e;
           console.error(errorText);
           this.setState({ status: errorText });
+      }).then((companyName) => {
+          console.log("comp: " + companyName);
+          fetch("https://gif-reacts-only.herokuapp.com/tests/endpoint", {
+              method: 'POST',
+              timeout: 10000,
+              body: JSON.stringify({
+                  //company: companyName
+                  company: "Google"
+              })
+          }).then((output) => {
+              parsed = output.json();
+              if(parsed.answer){
+                  answer = parsed.answer.ResultSet.Query;
+                  console.log("answer: " + answer);
+              } else{
+                  console.log("Company doesn't have a stock.");
+              }
+              //answer = parsed["_55"].answer;
+              console.log(parsed);
+              console.log(parsed.answer)
+              //console.log(parsed["_55"])
+          }).catch((error) => {
+              console.log(error);
+          });
       });
     }
   };
