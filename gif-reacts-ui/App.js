@@ -1,18 +1,17 @@
-import React from 'react';
-import { Button, Image, View } from 'react-native';
+'use strict';
+import React, { Component } from 'react';
+import { StyleSheet, Button, Image, Text, View } from 'react-native';
+import {
+  AppRegistry,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View
+} from 'react-native';
 import { ImagePicker } from 'expo';
 
-export default class ImagePickerExample extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-     image: null,
-    }
-
-    this.captureImage();
-  }
-
+export default class App extends Component {
   state = {
     image: null,
   };
@@ -23,8 +22,8 @@ export default class ImagePickerExample extends React.Component {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Button
-          title="Take Another Picture"
-          onPress={this.captureImage}
+          title="Pick an image from camera roll"
+          onPress={this._pickImage}
         />
         {image &&
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
@@ -32,7 +31,7 @@ export default class ImagePickerExample extends React.Component {
     );
   }
 
-  captureImage = async () => {
+  _pickImage = async () => {
     let result = await ImagePicker.launchCameraAsync({
       allowsEditing: false,
   }, function(){
@@ -45,7 +44,8 @@ export default class ImagePickerExample extends React.Component {
           success: function(output){
               console.log("submitted image to server; output: " + output);
           }
-      });
+      })
+  });
 
     console.log(result);
 
@@ -53,6 +53,15 @@ export default class ImagePickerExample extends React.Component {
       this.setState({ image: result.uri });
     }
   };
+  /*render() {
+    return (
+      <View style={styles.container}>
+        <Text>Open up App.js to start working on your app!</Text>
+        <Text>Changes you make will automatically reload.</Text>
+        <Text>Shake your phone to open the developer menu.</Text>
+      </View>
+    );
+    }*/
 }
 
 const styles = StyleSheet.create({
@@ -74,3 +83,5 @@ const styles = StyleSheet.create({
     margin: 40
   }
 });
+
+AppRegistry.registerComponent('App', () => BadInstagramCloneApp);
