@@ -34,7 +34,7 @@ def my_endpoint():
         best_dates = sorted(dates_sliding, key=lambda x:x[0])
         top_dates = {'dates': sorted([x[1] for x in best_dates[-5:]])}
         
-        return jsonify({'dates': top_dates})
+        return jsonify(top_dates)
     else:
         return jsonify({})
 
