@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, redirect, url_for
-from werkzeug.utils import secure_filename
+#from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'pix'
