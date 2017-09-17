@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "expo": "^20.0.0",
-    "jquery": "^3.2.1",
+    "google-finance": "^0.1.9",
     "react": "16.0.0-alpha.12",
     "react-cloud-vision-api": "^0.3.0",
     "react-native": "^0.47.0"

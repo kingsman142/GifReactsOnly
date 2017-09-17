@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Image, Text, View, StyleSheet } from 'react-native';
 import { ImagePicker } from 'expo';
-import vision from "react-cloud-vision-api";
-import $ from 'jquery';
+import vision from 'react-cloud-vision-api';
+
 vision.init({ auth: 'AIzaSyC7fk12dbsYVi7x4zBC4suE3zQpJQboIGU' })
 
 export default class ImagePickerExample extends React.Component {
@@ -62,35 +62,26 @@ export default class ImagePickerExample extends React.Component {
           this.setState({ status: JSON.stringify(res.responses) });
           console.log(res.responses);
 
-          if(res && res.responses && res.responses[0] && res.responses[0].logoAnnotations && res.responses[0].logoAnnotations[0] && res.responses[0].logoAnnotations[0].description) return res.responses[0].logoAnnotations[0].description; //Company name
-          else return "";
+          if (res && res.responses && res.responses[0] && res.responses[0].logoAnnotations && res.responses[0].logoAnnotations[0] && res.responses[0].logoAnnotations[0].description) {
+              return res.responses[0].logoAnnotations[0].description; //Company name
+          }
+          else return '';
       }, (e) => {
           let errorText = 'Error: ' + e;
           console.error(errorText);
           this.setState({ status: errorText });
       }).then((companyName) => {
-          console.log("comp: " + companyName);
-          fetch("https://gif-reacts-only.herokuapp.com/tests/endpoint", {
+          console.log('company', companyName);
+          fetch('https://gif-reacts-only.herokuapp.com/getDates', {
               method: 'POST',
               timeout: 10000,
-              body: JSON.stringify({
-                  //company: companyName
-                  company: "Google"
-              })
-          }).then((output) => {
-              parsed = output.json();
-              if(parsed.answer){
-                  answer = parsed.answer.ResultSet.Query;
-                  console.log("answer: " + answer);
-              } else{
-                  console.log("Company doesn't have a stock.");
-              }
-              //answer = parsed["_55"].answer;
-              console.log(parsed);
-              console.log(parsed.answer)
-              //console.log(parsed["_55"])
+              body: JSON.stringify({'company': companyName})
+          }).then((output) => output.json()).then((parsed) => {
+              let dates = parsed.dates;
+              console.log(dates);
+              this.setState({ dates: dates });
           }).catch((error) => {
-              console.log(error);
+              console.error(error);
           });
       });
     }
