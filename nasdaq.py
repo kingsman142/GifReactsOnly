@@ -1,45 +1,43 @@
 import websocket
 import threading
 import time
-import argparse
+import json
 
-def on_message(ws, message):
-   print(message)
+class nasdaq():
 
-def on_error(ws, error):
-   print(error)
+    def __init__(self, start, end, symbol):
+        self.start = start
+        self.end = end
+        self.symbol = symbol
+        self.prices = []
+    def on_message(self, ws, message):
+        print(message)
+        self.prices.append(json.loads(message))
 
-def on_close(ws):
-   print("### closed ###")
+    def on_error(self, ws, error):
+        print(error)
 
-def on_open(ws):
-   def run():
-       ws.send("")
-       time.sleep(1)
-       ws.close()
-   threading.Thread(target=run).start()
+    def on_close(self, ws):
+        print("### closed ###")
 
-def main():
-   parser = argparse.ArgumentParser(description='gettin some market data')
-   parser.add_argument('--start_date', required=True, help="Enter a valid start date in YYYYMMDD format")
-   parser.add_argument('--end_date', required=True, help="Enter a valid end date in YYYYMMDD format")
-   parser.add_argument('--symbols', required=True, help="Enter a ticker symbol or list of tickers. E.g. NDAQ or NDAQ,AAPL,MSFT")
+    def on_open(self, ws):
+        def run():
+            self.ws.send("")
+            time.sleep(1)
+            self.ws.close()
+        threading.Thread(target=run).start()
 
-   args = parser.parse_args()
+    def get_prices(self):
+        
+        websocket.enableTrace(True)
 
-   websocket.enableTrace(True)
 
-   symbols = args.symbols.split(',')
+        url = 'ws://35.161.245.102/stream?symbol={}&start={}&end={}'.format(self.symbol, self.start, self.end)
 
-   for symbol in symbols:
-       url = 'ws://35.161.245.102/stream?symbol={}&start={}&end={}'.format(symbol,args.start_date,args.end_date)
+        self.ws = websocket.WebSocketApp(url,
+                                    on_message = self.on_message,
+                                    on_error = self.on_error,
+                                    on_close = self.on_close)
+        self.ws.on_open = self.on_open
+        self.ws.run_forever()
 
-       ws = websocket.WebSocketApp(url,
-                                   on_message = on_message,
-                                   on_error = on_error,
-                                   on_close = on_close)
-       ws.on_open = on_open
-       ws.run_forever()
-
-if __name__ == "__main__":
-  main() 

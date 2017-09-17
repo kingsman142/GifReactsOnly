@@ -1,11 +1,11 @@
 import os
 import logging
 from flask import Flask, render_template, request, url_for, jsonify
-#from werkzeug.utils import secure_filename
 import requests
 import json
 import nasdaq
 app = Flask(__name__)
+
 
 def get_stuff(query):
     query = '+'.join(query.split())
